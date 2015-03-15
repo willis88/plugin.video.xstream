@@ -82,7 +82,11 @@ class cPluginHandler:
         if not os.path.exists(self.pluginDBFile):
             return dict()
         file = open(self.pluginDBFile, 'r')
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except ValueError:
+            logger.error("pluginDB seems corrupt, creating new one")
+            data = dict()
         file.close()
         return data
 
