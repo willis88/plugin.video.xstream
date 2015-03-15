@@ -155,32 +155,28 @@ def _parseMovieList(url):
 #---------------------------------------------------------------------   
   
 def getHosters():
-  oParams = ParameterHandler() #Parameter laden
-  sUrl = oParams.getValue('siteUrl')  # Weitergegebenen Urlteil aus den Parametern holen
-  
-  oRequestHandler = cRequestHandler(URL_MAIN+sUrl) # gesamte Url zusammesetzen
-  sHtmlContent = oRequestHandler.request()         # Seite abrufen
+    oParams = ParameterHandler() #Parameter laden
+    sUrl = oParams.getValue('siteUrl')  # Weitergegebenen Urlteil aus den Parametern holen
 
-  sPattern = 'IFRAME SRC="([^"]+)"'
-  oParser = cParser()
-  aResult = oParser.parse(sHtmlContent, sPattern)
-  hosters = []                                     # hosterliste initialisieren
-  sFunction='getHosterUrl'                         # folgeFunktion festlegen
-  if (aResult[0] == True):
-      for aEntry in aResult[1]:
-          hoster = {}
-          hoster['link'] = aEntry
-          # extract domain name
-          temp = aEntry.split('//')
-          temp = str(temp[-1]).split('/')
-          temp = str(temp[0]).split('.')
-          hoster['name'] = temp[-2]
-          hosters.append(hoster)
-    hosters.append(sFunction)
-  return hosters
+    oRequestHandler = cRequestHandler(URL_MAIN+sUrl) # gesamte Url zusammesetzen
+    sHtmlContent = oRequestHandler.request()         # Seite abrufen
+    
+    sPattern = 'IFRAME SRC="([^"]+)"'
+    oParser = cParser()
+    aResult = oParser.parse(sHtmlContent, sPattern)
+    hosters = []                                     # hosterliste initialisieren
+    sFunction='getHosterUrl'                         # folgeFunktion festlegen
+    if (aResult[0] == True):
+        for aEntry in aResult[1]:
+            hoster = {}
+            hoster['link'] = aEntry
+            # extract domain name
+            hoster['name'] = aEntry.split('//')[-1].split('/')[0].split('.')[-2]
+            hosters.append(hoster)
+        hosters.append(sFunction)
+    return hosters
   
 def getHosterUrl(sStreamUrl = False):
-
    if not sStreamUrl:
        params = ParameterHandler()
        sStreamUrl = oParams.getValue('url')
