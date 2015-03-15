@@ -169,8 +169,10 @@ def showXXX():
 def showHDMovies():
     oGui = cGui()
     sUrl = 'http://gstream.to/search.php?do=process&prefixchoice[]=hd'
-    iPage = 1
-    __parseMovieResultSite(oGui, sUrl, sUrl)
+    oRequest = cRequestHandler(sUrl, caching = False)
+    oRequest.request()
+    sUrl = oRequest.getRealUrl()
+    __parseMovieResultSite(oGui, sUrl)
     oGui.setEndOfDirectory()    
 
 def displaySearch():
@@ -189,7 +191,7 @@ def _search(oGui, sSearchText):
         sSearchType = '528'
     sUrl = URL_SEARCH+'?do=process&childforums=1&do=process&exactname=1&forumchoice[]='+sSearchType+\
         '&query=' + str(sSearchText) + '&quicksearch=1&s=&securitytoken=guest&titleonly=1'
-    oRequest = cRequestHandler(sUrl)
+    oRequest = cRequestHandler(sUrl, caching = False)
     oRequest.request()
     sUrl = oRequest.getRealUrl()
     __parseMovieResultSite(oGui, sUrl)
